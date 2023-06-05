@@ -1,0 +1,19 @@
+{% paginate blog.articles by 3 %}
+  {% for article in blog.articles %}
+    <div>
+      {% if article.image %}
+        <img src="{{ article.image | img_url: 'medium' }}" alt="{{ article.image.alt }}">
+      {% else %}
+        <div class="post-2-wrap">
+          {{ 'image' | placeholder_svg_tag }}
+        </div>
+      {% endif %}
+    </div>
+    <h2>{{ article.title }}</h2>
+    {% if article.excerpt.size > 0 %}
+      {% comment %} Render excerpt {% endcomment %}
+    {% else %}
+      <p>{{ article.content | strip_html | truncatewords: 15 }}</p>
+    {% endif %}
+  {% endfor %}
+{% endpaginate %}
