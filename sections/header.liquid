@@ -1,0 +1,47 @@
+<header class="relative bg-white" id="main-header">
+  <div class="mx-auto px-4 sm:px-6">
+    <div class="flex justify-content items-center py-6 md:justify-start md:space-x-10" id="header-inner">
+      {% comment %} Store logo {% endcomment %}
+      {% comment %} Navigation {% endcomment %}
+      <nav class="hidden md:flex space-x-10" id="main-nav">
+        {% for link in section.settings.menu.links %}
+          {% if link.links != blank %}
+            <div class="relative">
+              <button class="inline-flex items-center">
+                {{ link.title }}
+                {% render 'icon-dropdown' %}
+              </button>
+            </div>
+          {% else %}
+            <a href="{{ link.url }}" class="text-base text-gray-500 hover:text-gray-700">{{ link.title }}</a>
+          {% endif %}
+        {% endfor %}
+      </nav>
+      {% comment %} Cart button / Account links if enabled {% endcomment %}
+      <div>
+        <a href="/cart" class="cart">{% render 'icon-cart' %}</a>
+        {% if shop.customer_account_enabled %}
+          {% if customer %}
+            <a href="/account">account</a>
+          {% else %}
+            <p>login</p>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "label": "Headeing Navigation Menu"
+    }
+  ]
+}
+{% endschema %}
