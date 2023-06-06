@@ -1,0 +1,63 @@
+{% if cart.item_count > 0 %}
+  <div>
+    <h1>Your cart</h1>
+    <a href="{{ routes.all_products_collection_url }}">Continue shoping</a>
+  </div>
+
+  <div>
+    <form action="{{ routes.cart_url }}" method="POST" novalidate>
+      <table>
+        <thead>
+          <th>Product</th>
+          <th>Quantity</th>
+          <th>Total Price</th>
+        </thead>
+        <tbody>
+          {% for item in cart.items %}
+            <tr>
+              <td>
+                <a href="{{ item.url }}">
+                  {% if item.image %}
+                    <img src="{{ item.image | img_url: 'small' }}" alt="{{ product.title | escape }}">
+                  {% else %}
+                    {{ 'product-1' | placeholder_svg_tag }}
+                  {% endif %}
+                </a>
+                <div>
+                  <a href="{{ item.url }}">{{ item.title | truncatewords: 5 }}</a>
+                  <small>{{ item.variant.title }}</small>
+                  <a href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity=0">remove</a>
+                </div>
+              </td>
+              <td>
+                <input
+                  type="number"
+                  name="update[]"
+                  value="{{ item.quantity }}"
+                  min="1"
+                  id="updates_{{ forloop.index }}"
+                >
+              </td>
+              <td>
+                {{ item.line_price | money }}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div>
+        <h3>Subtotal: {{ cart.total_price | money }}</h3>
+        <div>
+          <button type="submit" name="update">Update</button>
+        </div>
+        <div>
+          <button type="submit" name="checkout">Checkout</button>
+        </div>
+      </div>
+    </form>
+  </div>
+{% else %}
+  <h1>Your cart is empty</h1>
+  <a href="{{ routes.all_products_collection_url }}">Continue shoping</a>
+{% endif %}

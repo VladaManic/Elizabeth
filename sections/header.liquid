@@ -19,10 +19,10 @@
       </nav>
       {% comment %} Cart button / Account links if enabled {% endcomment %}
       <div>
-        <a href="/cart" class="cart">{% render 'icon-cart' %}</a>
+        <a href="{{ routes.cart_url }}" class="cart">{% render 'icon-cart' %}</a>
         {% if shop.customer_account_enabled %}
           {% if customer %}
-            <a href="/account">account</a>
+            <a href="{{ routes.account_url }}">account</a>
           {% else %}
             <p>login</p>
           {% endif %}
