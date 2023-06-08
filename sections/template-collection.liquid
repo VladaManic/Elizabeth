@@ -1,3 +1,4 @@
+<a href="{{ routes.collections_url }}">Go back to collections</a>
 {% paginate collection.products by section.settings.number_of_products_per_page %}
   <h1>{{ collection.title }}</h1>
   {% for product in collection.products %}
