@@ -1,0 +1,9 @@
+{
+	"name": "Template Gallery",
+	"sections": {
+		"template": {
+			"type": "template-page-gallery"
+		}
+	},
+	"order": ["template"]
+}
