@@ -1,6 +1,8 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
 <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
 
+{% assign selected_variant = product.selected_or_first_available_variant %}
+
 <div id="product">
   <div>
     <div>
@@ -27,21 +29,20 @@
 
   <div class="product-information">
     {% form 'product', product %}
-      <input type="hidden" name="id" value="{{product.selected_or_first_available_variant.id}}">
+      <input type="hidden" name="id" value="{{selected_variant.id}}">
       <p>{{ product.vendor }}</p>
       <h1>{{ product.title }}</h1>
-      {% assign product_price = product.selected_or_first_available_variant %}
-      <p>{{ product_price.compare_at_price | money }}</p>
-      <p>{{ product_price.price | money }}</p>
-      {% if product_price.price < product_price.compare_at_price %}
+      <p>{{ selected_variant.compare_at_price | money }}</p>
+      <p>{{ selected_variant.price | money }}</p>
+      {% if selected_variant.price < selected_variant.compare_at_price %}
         <span>Sale</span>
       {% endif %}
       {% unless product.has_only_default_variant %}
         <div data-url="{{product.url}}" data-section="{{section.id}}">
           {% for option in product.options_with_values %}
-            <label for="option-{{section.id}}-{{forloop.index0}}">{{ option.name }}</label>
+            <label for="Option-{{section.id}}-{{forloop.index0}}">{{ option.name }}</label>
             <div>
-              <select name="options[{{option.name | escape}}]" id="option-{{section.id}}-{{forloop.index0}}">
+              <select name="options[{{option.name | escape}}]" id="Option-{{section.id}}-{{forloop.index0}}">
                 {% for value in option.values %}
                   <option
                     value="{{value | escape}}"
@@ -68,11 +69,11 @@
       <button
         type="submit"
         name="add"
-        {% if product.selected_or_first_available_variant == false %}
+        {% if selected_variant.available == false %}
           disabled
         {% endif %}
       >
-        {% if product.selected_or_first_available_variant.available == false %}
+        {% if selected_variant.available == false %}
           Sold out
         {% else %}
           Add to Cart
