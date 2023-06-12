@@ -3,24 +3,82 @@
 
 <div id="product">
   <div>
-    {% for media in product.media %}
-      {% render 'product-media', media: media %}
-    {% endfor %}
-  </div>
-
-  <div class="swiper">
-    <div class="swiper-wrapper">
+    <div>
       {% for media in product.media %}
-        <div class="swiper-slide">
-          {% render 'product-media', media: media %}
-        </div>
+        {% render 'product-media', media: media %}
       {% endfor %}
     </div>
 
-    <div class="swiper-pagination"></div>
+    <div class="swiper">
+      <div class="swiper-wrapper">
+        {% for media in product.media %}
+          <div class="swiper-slide">
+            {% render 'product-media', media: media %}
+          </div>
+        {% endfor %}
+      </div>
 
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
+      <div class="swiper-pagination"></div>
+
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+    </div>
+  </div>
+
+  <div class="product-information">
+    {% form 'product', product %}
+      <input type="hidden" name="id" value="{{product.selected_or_first_available_variant.id}}">
+      <p>{{ product.vendor }}</p>
+      <h1>{{ product.title }}</h1>
+      {% assign product_price = product.selected_or_first_available_variant %}
+      <p>{{ product_price.compare_at_price | money }}</p>
+      <p>{{ product_price.price | money }}</p>
+      {% if product_price.price < product_price.compare_at_price %}
+        <span>Sale</span>
+      {% endif %}
+      {% unless product.has_only_default_variant %}
+        <div data-url="{{product.url}}" data-section="{{section.id}}">
+          {% for option in product.options_with_values %}
+            <label for="option-{{section.id}}-{{forloop.index0}}">{{ option.name }}</label>
+            <div>
+              <select name="options[{{option.name | escape}}]" id="option-{{section.id}}-{{forloop.index0}}">
+                {% for value in option.values %}
+                  <option
+                    value="{{value | escape}}"
+                    {% if option.selected_value == value %}
+                      selected="selected"
+                    {% endif %}
+                  >
+                    {{ value }}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+          {% endfor %}
+        </div>
+      {% endunless %}
+
+      <div>
+        <label for="quantity-{{section.id}}">Quantity</label>
+        <input type="number" name="quantity" id="quantity-{{selected.id}}" value="1" min="1">
+      </div>
+
+      <p>{{ product.description }}</p>
+
+      <button
+        type="submit"
+        name="add"
+        {% if product.selected_or_first_available_variant == false %}
+          disabled
+        {% endif %}
+      >
+        {% if product.selected_or_first_available_variant.available == false %}
+          Sold out
+        {% else %}
+          Add to Cart
+        {% endif %}
+      </button>
+    {% endform %}
   </div>
 </div>
 
