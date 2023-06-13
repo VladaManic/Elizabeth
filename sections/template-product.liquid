@@ -38,7 +38,7 @@
         <span>Sale</span>
       {% endif %}
       {% unless product.has_only_default_variant %}
-        {% comment %} Select JS {% endcomment %}
+        {% comment %} Select variant JS {% endcomment %}
         <variant-selector data-url="{{product.url}}" data-section="{{section.id}}">
           {% for option in product.options_with_values %}
             <label for="Option-{{section.id}}-{{forloop.index0}}">{{ option.name }}</label>
@@ -56,7 +56,7 @@
                 {% endfor %}
               </select>
             </div>
-            {% comment %} Select JS {% endcomment %}
+            {% comment %} Select variant JS {% endcomment %}
             <script type="application/json">
               {{product.variants | json}}
             </script>
@@ -88,12 +88,8 @@
   </div>
 </div>
 
-{% comment %} Select JS {% endcomment %}
+{% comment %} Select variant JS {% endcomment %}
 <script>
-  
-  
-  
-  
   
   
   class VariantSelector extends HTMLElement {
@@ -163,10 +159,6 @@
   }
 
   customElements.define('variant-selector', VariantSelector);
-
-
-
-
 
 
 </script>
