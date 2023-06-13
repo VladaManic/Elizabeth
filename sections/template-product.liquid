@@ -28,7 +28,7 @@
   </div>
 
   <div class="product-information">
-    {% form 'product', product %}
+    {% form 'product', product, id: 'product-form', novalidate: 'novalidate' %}
       <input type="hidden" name="id" value="{{selected_variant.id}}">
       <p>{{ product.vendor }}</p>
       <h1>{{ product.title }}</h1>
@@ -38,7 +38,8 @@
         <span>Sale</span>
       {% endif %}
       {% unless product.has_only_default_variant %}
-        <div data-url="{{product.url}}" data-section="{{section.id}}">
+        {% comment %} Select JS {% endcomment %}
+        <variant-selector data-url="{{product.url}}" data-section="{{section.id}}">
           {% for option in product.options_with_values %}
             <label for="Option-{{section.id}}-{{forloop.index0}}">{{ option.name }}</label>
             <div>
@@ -55,8 +56,12 @@
                 {% endfor %}
               </select>
             </div>
+            {% comment %} Select JS {% endcomment %}
+            <script type="application/json">
+              {{product.variants | json}}
+            </script>
           {% endfor %}
-        </div>
+        </variant-selector>
       {% endunless %}
 
       <div>
@@ -82,6 +87,89 @@
     {% endform %}
   </div>
 </div>
+
+{% comment %} Select JS {% endcomment %}
+<script>
+  
+  
+  
+  
+  
+  
+  class VariantSelector extends HTMLElement {
+    constructor() {
+      super();
+      this.addEventListener('change', this.onVariantChange);
+    }
+
+    onVariantChange() {
+      this.getSelectedOptions();
+      this.getSelectedVariant();
+
+      if (this.currentVariant) {
+        this.updateURL();
+        this.updateFormID();
+        {% comment %} this.updatePrice(); {% endcomment %}
+      }
+    }
+
+    getSelectedOptions() {
+      this.options = Array.from(this.querySelectorAll('select'), (select) => select.value);
+      console.log(this.options);
+    }
+
+    getVariantJSON() {
+      this.variantData = this.variantData || JSON.parse(this.querySelector('[type="application/json"]').textContent);
+      return this.variantData;
+    }
+
+    getSelectedVariant() {
+      this.currentVariant = this.getVariantJSON().find((variant) => {
+        const findings = !variant.options
+          .map((option, index) => {
+            return this.options[index] === option;
+          })
+          .includes(false);
+
+        if (findings) return variant;
+      });
+
+      console.log(this.currentVariant);
+    }
+
+    updateURL() {
+      if (!this.currentVariant) return;
+      window.history.replaceState({}, '', `${this.dataset.url}?variant=${this.currentVariant.id}`);
+    }
+
+    updateFormID() {
+      const form_input = document.querySelector('#product-form').querySelector('input[name="id"]');
+      form_input.value = this.currentVariant.id;
+    }
+
+    {% comment %} updatePrice() {
+      fetch(`${this.dataset.url}?varinat=${this.currentVariant.id}&section_id=${this.dataset.section}`)
+      .this((response) => response.text())
+      .this((responseText)) => {
+        const id = `price-${this.dataset.section}`;
+        const html = new DOMParser().parseFromString(responseText, 'text/html'));
+        const oldPrice = document.getElementById(id);
+        const newPrice = html.getElementById(id);
+        if(oldPrice && newPrice){
+          oldPrice.innerHTML = newPrice.innerHTML;
+        }
+      }
+    } {% endcomment %}
+  }
+
+  customElements.define('variant-selector', VariantSelector);
+
+
+
+
+
+
+</script>
 
 <script>
   const swiper = new Swiper('.swiper', {
