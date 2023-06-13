@@ -32,7 +32,7 @@
       <input type="hidden" name="id" value="{{selected_variant.id}}">
       <p>{{ product.vendor }}</p>
       <h1>{{ product.title }}</h1>
-      <div id="price-{{select.id}}">
+      <div id="price-{{section.id}}">
         <p>{{ selected_variant.compare_at_price | money }}</p>
         <p>{{ selected_variant.price | money }}</p>
         {% if selected_variant.price < selected_variant.compare_at_price %}
@@ -111,7 +111,6 @@
 
     getSelectedOptions() {
       this.options = Array.from(this.querySelectorAll('select'), (select) => select.value);
-      console.log(this.options);
     }
 
     getVariantJSON() {
@@ -129,8 +128,6 @@
 
         if (findings) return variant;
       });
-
-      console.log(this.currentVariant);
     }
 
     updateURL() {
