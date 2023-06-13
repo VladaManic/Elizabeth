@@ -1,0 +1,25 @@
+<div>
+  <h1>Sign into your account</h1>
+  <div>
+    {% form 'customer_login' %}
+      {% if form.errors %}
+        <p>{{ form.errors | default_errors }}</p>
+      {% endif %}
+      <div>
+        <label for="email_address">Email address</label>
+        <input type="email" name="customer[email]" id="email_address" autocomplete="email" placeholder="Email address">
+      </div>
+
+      {% if form.password_needed %}
+        <div>
+          <label for="password">Password</label>
+          <input type="password" name="customer[password]" id="password" autocomplete="password" placeholder="Password">
+        </div>
+      {% endif %}
+
+      <div>
+        <button type="submit">Sign in</button>
+      </div>
+    {% endform %}
+  </div>
+</div>
