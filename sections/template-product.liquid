@@ -95,6 +95,7 @@
   
   
   
+  
   class VariantSelector extends HTMLElement {
     constructor() {
       super();
@@ -147,7 +148,7 @@
     }
 
     {% comment %} updatePrice() {
-      fetch(`${this.dataset.url}?varinat=${this.currentVariant.id}&section_id=${this.dataset.section}`)
+      fetch(`${this.dataset.url}?variant=${this.currentVariant.id}&section_id=${this.dataset.section}`)
       .this((response) => response.text())
       .this((responseText)) => {
         const id = `price-${this.dataset.section}`;
@@ -162,6 +163,7 @@
   }
 
   customElements.define('variant-selector', VariantSelector);
+
 
 
 
