@@ -32,11 +32,13 @@
       <input type="hidden" name="id" value="{{selected_variant.id}}">
       <p>{{ product.vendor }}</p>
       <h1>{{ product.title }}</h1>
-      <p>{{ selected_variant.compare_at_price | money }}</p>
-      <p>{{ selected_variant.price | money }}</p>
-      {% if selected_variant.price < selected_variant.compare_at_price %}
-        <span>Sale</span>
-      {% endif %}
+      <div id="price-{{select.id}}">
+        <p>{{ selected_variant.compare_at_price | money }}</p>
+        <p>{{ selected_variant.price | money }}</p>
+        {% if selected_variant.price < selected_variant.compare_at_price %}
+          <span>Sale</span>
+        {% endif %}
+      </div>
       {% unless product.has_only_default_variant %}
         {% comment %} Select variant JS {% endcomment %}
         <variant-selector data-url="{{product.url}}" data-section="{{section.id}}">
@@ -90,6 +92,7 @@
 
 {% comment %} Select variant JS {% endcomment %}
 <script>
+  
   
   
   class VariantSelector extends HTMLElement {
@@ -159,6 +162,7 @@
   }
 
   customElements.define('variant-selector', VariantSelector);
+
 
 
 </script>
