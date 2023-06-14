@@ -1,0 +1,47 @@
+<div>
+  <h1>Account</h1>
+  <div>
+    {% assign number_of_orders = customer.orders | size %}
+    {% if number_of_orders > 0 %}
+      <div>
+        <h3>Order history</h3>
+
+        <div>
+          {% paginate customer.orders by 10 %}
+            {% for order in customer.orders %}
+              <div>
+                {% if order.line_items.first.image %}
+                  <img src="{{order.line_items.first.image | img_url}}" alt="{{order.line_items.first.image.alt}}">
+                {% else %}
+                  {{ 'product-1' | placeholder_svg_tag }}
+                {% endif %}
+              </div>
+              <div>
+                <h3>
+                  <a href="{{order.customer_url}}">{{ order.name }}</a>
+                </h3>
+                <p>{{ order.financial_status_label }}</p>
+                <p>{{ order.fulfillment_status_label }}</p>
+                <p>{{ order.total_price | money }}</p>
+              </div>
+            {% endfor %}
+
+            <div>
+              {% render 'pagination', pagination: paginate %}
+            </div>
+          {% endpaginate %}
+        </div>
+      </div>
+    {% else %}
+      <div>
+        <h3>No orders.</h3>
+      </div>
+    {% endif %}
+  </div>
+
+  <div>
+    <h2>Account details</h2>
+    {{ customer.default_address | format_address }}
+    <a href="{{routes.account_addresses_url}}">View addresses</a>
+  </div>
+</div>
