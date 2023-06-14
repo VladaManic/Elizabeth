@@ -21,6 +21,12 @@
         <button type="submit">Sign in</button>
       </div>
     {% endform %}
+
+    {% comment %} Guest login {% endcomment %}
+    {% if shop.checkout.guest_login %}
+      <h2>Continue as a guest</h2>
+      <button type="submit"></button>
+    {% endif %}
   </div>
 
   <h1>Recover your password</h1>
