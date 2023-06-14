@@ -1,0 +1,39 @@
+<div>
+  <h1>Register an account</h1>
+  <div>
+    {% form 'create_customer' %}
+      {% if form.errors %}
+        <p>{{ form.errors | default_errors }}</p>
+      {% endif %}
+      <div>
+        <label for="first_name">First name</label>
+        <input
+          type="text"
+          name="customer[first_name]"
+          id="first_name"
+          autocomplete="given-name"
+          placeholder="First name"
+        >
+      </div>
+
+      <div>
+        <label for="last_name">Last name</label>
+        <input type="text" name="customer[last_name]" id="last_name" autocomplete="family-name" placeholder="Last name">
+      </div>
+
+      <div>
+        <label for="email_address">Email address</label>
+        <input type="email" name="customer[email]" id="email_address" autocomplete="email" placeholder="Email address">
+      </div>
+
+      <div>
+        <label for="password">Password</label>
+        <input type="password" name="customer[password]" id="password" autocomplete="password" placeholder="Password">
+      </div>
+
+      <div>
+        <button type="submit">Create account</button>
+      </div>
+    {% endform %}
+  </div>
+</div>
