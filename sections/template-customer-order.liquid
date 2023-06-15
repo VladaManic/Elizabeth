@@ -1,0 +1,74 @@
+<div>
+  <div>
+    <h1>{{ order.name }}</h1>
+    <p>Placed on: {{ order.created_at | date: format: 'date' }}</p>
+    <p>{{ order.financial_status_label }}</p>
+    <a href="{{routes.account_url}}">Back to account</a>
+  </div>
+  <div>
+    {% for line_item in order.line_items %}
+      {% if line_item.image %}
+        <img src="{{line_item.image | img_url }}" alt="{{line_item.image.alt }}">
+      {% else %}
+        {{ 'product-1' | placeholder_svg_tag }}
+      {% endif %}
+
+      <div>
+        <h1>{{ line_item.title }}</h1>
+      </div>
+
+      <table>
+        <tbody>
+          <tr>
+            <td>Price</td>
+            <td>{{ line_item.original_price | money }}</td>
+          </tr>
+          <tr>
+            <td>Quantity</td>
+            <td>{{ line_item.quantity }}</td>
+          </tr>
+          <tr>
+            <td>Final price</td>
+            <td>{{ line_item.final_line_price | money }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div>
+        {{ line_item.product.description | truncatewords: 15 }}
+      </div>
+
+      <div>
+        <h1>Delivery address</h1>
+        <div>
+          {{ order.shipping_address | format_address }}
+        </div>
+      </div>
+
+      <div>
+        <h1>Delivery address alternative</h1>
+        <div>
+          <p>Address 1: {{ order.shipping_address.address1 }}</p>
+          <p>Address 2: {{ order.shipping_address.address2 }}</p>
+          <p>Street: {{ order.shipping_address.street }}</p>
+          <p>Province: {{ order.shipping_address.province }}</p>
+          <p>City: {{ order.shipping_address.city }}</p>
+          <p>ZIP: {{ order.shipping_address.zip }}</p>
+          <p>Country: {{ order.shipping_address.country }}</p>
+        </div>
+      </div>
+
+      <div>
+        <h1>Fulfillment</h1>
+        {% if line_item.successfully_fulfilled_quantity > 0 %}
+          <p>We have fulfilled {{ line_item.successfully_fulfilled_quantity }} items of your order.</p>
+          <p>Tracking company: {{ line_item.fulfillment.tracking_company }}</p>
+          <p>Tracking number: {{ line_item.fulfillment.tracking_number }}</p>
+          <a href="{{line_item.fulfillment.tracking_url}}" target="_blank">Track order</a>
+        {% else %}
+          <p>This item is not fulfilled.</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
